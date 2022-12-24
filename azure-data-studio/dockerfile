@@ -1,0 +1,28 @@
+# Pull base image.
+FROM jlesage/baseimage-gui:ubuntu-20.04
+
+# Install azure data studio
+# ADD azuredatastudio-linux-1.36.2.deb .
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -qq
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install libasound2 wget curl git
+RUN wget https://go.microsoft.com/fwlink/?linkid=2193327 -O azuredatastudio.deb
+RUN DEBIAN_FRONTEND=noninteractive apt install ./azuredatastudio.deb -y -f
+
+# install FileBrowser
+RUN curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
+
+# Generate and install favicons.
+RUN \
+    APP_ICON_URL=https://raw.githubusercontent.com/microsoft/azuredatastudio/main/resources/win32/code_150x150.png && \
+    install_app_icon.sh "$APP_ICON_URL"
+
+# Copy the start script.
+COPY startapp.sh /startapp.sh
+
+# FileBrowser port
+EXPOSE 8080
+
+# Set the name of the application.
+ENV APP_NAME="Azure Data Studio"
+
+VOLUME ['/config']

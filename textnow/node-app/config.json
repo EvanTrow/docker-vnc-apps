@@ -1,0 +1,23 @@
+{
+	"debug": true,
+	"cron": "0 14 */5 * *",
+	"username": "testnow_username",
+	"password": "testnow_password",
+	"message_prefix": "TextNow Ping 🏓 ",
+	"email": {
+		"mailer": {
+			"host": "email.server.com",
+			"port": 587,
+			"secure": false,
+			"auth": {
+				"user": "error_notify@email.com",
+				"pass": "email_password"
+			},
+			"tls": {
+				"ciphers": "SSLv3"
+			}
+		},
+		"from": "TextNow <error_notify@email.com>",
+		"to": "error_notify_address@email.com"
+	}
+}

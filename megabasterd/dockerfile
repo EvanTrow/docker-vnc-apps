@@ -1,0 +1,38 @@
+# Pull base image.
+
+FROM jlesage/baseimage-gui:alpine-3.16-v4.2.2
+
+# Download snowflake
+RUN \
+    apk --no-cache add curl && \
+    mkdir -p /defaults && \
+    curl -# -L -o /defaults/megabasterd.jar https://github.com/tonikelope/megabasterd/releases/download/v7.55/MegaBasterd_7.55.jar
+
+RUN \
+    add-pkg \
+    # Java jdk
+    java-common \
+    openjdk11-jre \
+    # Needed by the init script.
+    jq \
+    # We need a font.
+    ttf-dejavu \
+    # For rtmpdump tool.
+    rtmpdump
+
+
+# Copy the start script.
+COPY startapp.sh /startapp.sh
+
+RUN export HOME="/config"
+
+# Generate and install favicons.
+RUN \
+    APP_ICON_URL=https://raw.githubusercontent.com/tonikelope/megabasterd/master/src/main/resources/images/pica_roja_big.png && \
+    install_app_icon.sh "$APP_ICON_URL"
+
+# Set the name of the application.
+ENV APP_NAME="MegaBasterd"
+
+ENV WEB_LISTENING_PORT=5843
+ENV VNC_LISTENING_PORT=5943
