@@ -1,0 +1,42 @@
+# Pull base image.
+FROM jlesage/baseimage-gui:ubuntu-20.04-v4.2.2
+
+# Setup
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update -qq
+RUN apt-get install -y curl wget gpg apt-transport-https sudo csh
+
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+RUN apt-get install nodejs
+
+# Install VS Code
+RUN apt-get install wget gpg
+RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+RUN install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+RUN sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+RUN rm -f packages.microsoft.gpg
+RUN apt update
+RUN apt install -y code && apt-get clean
+
+# Generate and install favicons.
+RUN \
+    APP_ICON_URL=https://code.visualstudio.com/apple-touch-icon.png && \
+    install_app_icon.sh "$APP_ICON_URL"
+
+# Copy the start script.
+COPY startapp.sh /startapp.sh
+
+# Copy file system
+COPY rootfs/ /
+
+# React port
+EXPOSE 3000
+
+# Set the name of the application.
+ENV APP_NAME="VS Code"
+
+ENV FOLDER_PATH="/config"
+
+VOLUME ["/config"]
