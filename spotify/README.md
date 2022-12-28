@@ -12,13 +12,13 @@ A docker container for [Spotify](https://spotify.com) via noVNC.
 ### **Build:**
 
 ```
-docker build -t evantrow/textnow .
+docker build -t evantrow/spotify .
 ```
 
 ### **Deploy:**
 
 ```
-docker run -d -p 5800:5800 -p 5900:5900 --device /dev/snd evantrow/textnow:latest
+docker run -d -p 5800:5800 -p 5900:5900 --device /dev/snd evantrow/spotify:latest
 ```
 
 ### **Ports:**
