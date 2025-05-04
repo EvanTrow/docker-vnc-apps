@@ -1,4 +1,4 @@
-## **vs code**
+## **MEGA Sync**
 
 A docker container for [MEGA Sync](https://mega.io/desktop#download) via noVNC.
 
